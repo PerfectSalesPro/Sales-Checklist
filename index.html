@@ -57,7 +57,7 @@
                             </div>
                             <button class="details-toggle text-sm font-semibold text-[#4A4742] hover:text-[#6B6862] transition-colors flex items-center">Details <svg class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                         </div>
-                        <div class="details-content mt-4 pl-10"><div class="text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><ul class="list-disc list-inside space-y-3"><li>Verify the **shipping address** and the **install address**, confirming if they are different.</li><li>Ask your champion:<blockquote class="border-l-4 border-[#D9D6D1] pl-4 italic my-2">"Will you be the main point of contact for scheduling the installation, or is there an office manager or someone else I should coordinate with?"</blockquote><ul class="list-[circle] list-inside ml-5 mt-2 space-y-1"><li>If there is another POC, be sure to get their full name, email, direct phone number, and their role/title.</li></ul></li><li>Add any new contact to the account immediately.</li><li class="font-bold">For all contacts associated with the opportunity, assign their relevant persona (e.g., Business Owner, Fleet Manager, Office Manager/Dispatch).</li></ul></div></div>
+                        <div class="details-content mt-4 pl-10"><div class="text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><ul class="list-disc list-inside space-y-3"><li>Verify the **shipping address** and the **install address**, confirming if they are different.</li><li>Ask your champion:<blockquote class="border-l-4 border-[#D9D6D1] pl-4 italic my-2">"Will you be the main point of contact for scheduling the installation, or is there an office manager or someone else I should coordinate with?"</blockquote>ul class="list-[circle] list-inside ml-5 mt-2 space-y-1"><li>If there is another POC, be sure to get their full name, email, direct phone number, and their role/title.</li></ul></li><li>Add any new contact to the account immediately.</li><li class="font-bold">For all contacts associated with the opportunity, assign their relevant persona (e.g., Business Owner, Fleet Manager, Office Manager/Dispatch).</li></ul></div></div>
                     </div>
                     <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
                         <div class="flex items-center justify-between">
@@ -279,6 +279,7 @@
                 
                 const baseURL = 'https://docs.google.com/forms/d/e/1FAIpQLSemch6-doXx4b9OPh1ZvssEhe_YnzI7LyP0N9b60-Otmn26QA/viewform?usp=pp_url';
                 const params = new URLSearchParams();
+                // FINAL MAPPING BASED ON USER'S LAST PROVIDED LINK AND ORDER
                 params.append('entry.1498937686', companyName);
                 params.append('entry.312361628', repName);
                 params.append('entry.138197049', vtu);
@@ -287,12 +288,12 @@
                 params.append('entry.1867577154', dateSold);
                 params.append('entry.828850557', leadSource);
                 params.append('entry.1504397745', svtNotes);
-                params.append('entry.863847063', vinNumbers);
-                params.append('entry.269011683', pvpvc);
-                params.append('entry.1906305465', m2);
-                params.append('entry.924526391', csp);
-                params.append('entry.564185478', unitsShipped);
-                params.append('entry.2031712552', vmi);
+                params.append('entry.863847063', vinNumbers); // Vin Numbers/YMM
+                params.append('entry.269011683', pvpvc);      // PVPVC updated in Gong?
+                params.append('entry.1906305465', m2);         // M2?
+                params.append('entry.924526391', csp);        // CSP Created?
+                params.append('entry.564185478', unitsShipped); // Units Shipped?
+                params.append('entry.2031712552', vmi);       // VMI?
 
 
                 const prefilledUrl = `${baseURL}&${params.toString()}`;
@@ -347,5 +348,3 @@
 </html>
 
 
-
- 
