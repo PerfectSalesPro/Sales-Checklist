@@ -288,13 +288,12 @@
                 params.append('entry.1867577154', dateSold);
                 params.append('entry.828850557', leadSource);
                 params.append('entry.1504397745', svtNotes);
-                params.append('entry.863847063', vinNumbers); // Vin Numbers/YMM
-                params.append('entry.269011683', pvpvc);      // PVPVC updated in Gong?
-                params.append('entry.1906305465', m2);         // M2?
-                params.append('entry.924526391', csp);        // CSP Created?
-                params.append('entry.564185478', unitsShipped); // Units Shipped?
-                params.append('entry.2031712552', vmi);       // VMI?
-
+                params.append('entry.863847063', vinNumbers); 
+                params.append('entry.269011683', pvpvc);      
+                params.append('entry.1906305465', m2);         
+                params.append('entry.924526391', csp);        
+                params.append('entry.564185478', unitsShipped); 
+                params.append('entry.2031712552', vmi);       // THIS IS THE FIELD WE ARE FIXING
 
                 const prefilledUrl = `${baseURL}&${params.toString()}`;
                 window.open(prefilledUrl, '_blank');
@@ -346,5 +345,3 @@
     </script>
 </body>
 </html>
-
-
