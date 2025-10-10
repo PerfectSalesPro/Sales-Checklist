@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Perfect Sale: Interactive Checklist</title>
+    <title>Post-Sale Automation & Compliance Guide</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -19,6 +19,20 @@
         .details-content.open { max-height: 600px; opacity: 1; }
         .checklist-item-checkbox:checked + label .checkbox-icon { transform: scale(1); }
         .checklist-item-checkbox:checked ~ .item-title { text-decoration: line-through; color: #9ca3af; }
+        /* Custom progress bar styles */
+        .section-progress-container {
+            width: 100%;
+            background-color: #EFEBE6;
+            border-radius: 9999px;
+            height: 6px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .section-progress-bar {
+            background-color: #8DBF8B;
+            height: 100%;
+            transition: width 0.5s ease-in-out;
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,13 +41,13 @@
 <body class="bg-[#FDFBF8] text-[#33312E] min-h-screen antialiased">
     <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-[#4A4742]">The Perfect Sale</h1>
-            <p class="text-lg text-[#6B6862] mt-2">Interactive Post-Sale Action Checklist</p>
+            <h1 class="text-3xl sm:text-4xl font-bold text-[#4A4742]">The Perfect Sale: Deal Automation Guide</h1>
+            <p class="text-lg text-[#6B6862] mt-2">A required guide to ensure full compliance and successful deal handoff automation.</p>
         </header>
 
         <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
             <div class="flex justify-between items-center mb-2">
-                <span class="text-sm font-medium text-[#4A4742]">Overall Progress</span>
+                <span class="text-sm font-medium text-[#4A4742]">Overall Compliance Progress</span>
                 <span id="progress-text" class="text-sm font-bold text-[#4A4742]">0%</span>
             </div>
             <div class="w-full bg-[#EFEBE6] rounded-full h-3">
@@ -44,12 +58,18 @@
 
         <main id="checklist-container">
             <section id="immediate-actions" class="mb-8">
-                <h2 class="text-2xl font-semibold border-b-2 border-[#EFEBE6] pb-3 mb-6 text-[#4A4742]">Immediate Actions <span class="text-base font-normal text-[#6B6862]">(Post-Signature)</span></h2>
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-semibold text-[#4A4742]">Immediate Actions <span class="text-base font-normal text-[#6B6862]">(Post-Signature)</span></h2>
+                    <span id="immediate-progress-text" class="text-sm font-bold text-[#4A4742]">0%</span>
+                </div>
+                <div class="section-progress-container"><div id="immediate-progress-bar" class="section-progress-bar"></div></div>
+                <div class="border-b-2 border-[#EFEBE6] pb-3 mb-6"></div>
+
                 <div class="space-y-4">
                     <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <input type="checkbox" id="item1" class="checklist-item-checkbox hidden">
+                                <input type="checkbox" id="item1" data-section="immediate" class="checklist-item-checkbox hidden">
                                 <label for="item1" class="flex items-center cursor-pointer">
                                     <span class="w-6 h-6 border-2 border-[#D9D6D1] rounded-md flex-shrink-0 mr-4 flex items-center justify-center"><svg class="checkbox-icon w-4 h-4 text-white bg-[#8DBF8B] rounded-sm transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span>
                                     <span class="item-title font-medium text-lg text-[#4A4742] transition-colors">Request POC & Verify Details</span>
@@ -57,12 +77,12 @@
                             </div>
                             <button class="details-toggle text-sm font-semibold text-[#4A4742] hover:text-[#6B6862] transition-colors flex items-center">Details <svg class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                         </div>
-                        <div class="details-content mt-4 pl-10"><div class="text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><ul class="list-disc list-inside space-y-3"><li>Verify the **shipping address** and the **install address**, confirming if they are different.</li><li>Ask your champion:<blockquote class="border-l-4 border-[#D9D6D1] pl-4 italic my-2">"Will you be the main point of contact for scheduling the installation, or is there an office manager or someone else I should coordinate with?"</blockquote>ul class="list-[circle] list-inside ml-5 mt-2 space-y-1"><li>If there is another POC, be sure to get their full name, email, direct phone number, and their role/title.</li></ul></li><li>Add any new contact to the account immediately.</li><li class="font-bold">For all contacts associated with the opportunity, assign their relevant persona (e.g., Business Owner, Fleet Manager, Office Manager/Dispatch).</li></ul></div></div>
+                        <div class="details-content mt-4 pl-10"><div class="text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><ul class="list-disc list-inside space-y-3"><li>Verify the **shipping address** and the **install address**, confirming if they are different.</li><li>Ask your champion:<blockquote class="border-l-4 border-[#D9D6D1] pl-4 italic my-2">"Will you be the main point of contact for scheduling the installation, or is there an office manager or someone else I should coordinate with?"</blockquote><ul class="list-[circle] list-inside ml-5 mt-2 space-y-1"><li>If there is another POC, be sure to get their full name, email, direct phone number, and their role/title.</li></ul></li><li>Add any new contact to the account immediately.</li><li class="font-bold">For all contacts associated with the opportunity, assign their relevant persona (e.g., Business Owner, Fleet Manager, Office Manager/Dispatch).</li></ul></div></div>
                     </div>
                     <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <input type="checkbox" id="item2" class="checklist-item-checkbox hidden">
+                                <input type="checkbox" id="item2" data-section="immediate" class="checklist-item-checkbox hidden">
                                 <label for="item2" class="flex items-center cursor-pointer">
                                     <span class="w-6 h-6 border-2 border-[#D9D6D1] rounded-md flex-shrink-0 mr-4 flex items-center justify-center"><svg class="checkbox-icon w-4 h-4 text-white bg-[#8DBF8B] rounded-sm transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span>
                                     <span class="item-title font-medium text-lg text-[#4A4742] transition-colors">Finalize Opportunity with Vins</span>
@@ -70,25 +90,12 @@
                             </div>
                             <button class="details-toggle text-sm font-semibold text-[#4A4742] hover:text-[#6B6862] transition-colors flex items-center">Details <svg class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                         </div>
-                        <div class="details-content mt-4 pl-10"><ul class="list-disc list-inside space-y-2 text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><li>Navigate to the opportunity record.</li><li>Hit **Capture Customer Details**.</li><li>Finalize with Install address/Shipping Address.</li></ul></div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
-                        <div class="flex items-center justify-between">
-                             <div class="flex items-center">
-                                <input type="checkbox" id="item3" class="checklist-item-checkbox hidden">
-                                <label for="item3" class="flex items-center cursor-pointer">
-                                    <span class="w-6 h-6 border-2 border-[#D9D6D1] rounded-md flex-shrink-0 mr-4 flex items-center justify-center"><svg class="checkbox-icon w-4 h-4 text-white bg-[#8DBF8B] rounded-sm transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span>
-                                    <span class="item-title font-medium text-lg text-[#4A4742] transition-colors">After Sale Confirmed : Check M2 Status</span>
-                                </label>
-                            </div>
-                            <button class="details-toggle text-sm font-semibold text-[#4A4742] hover:text-[#6B6862] transition-colors flex items-center">Details <svg class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
-                        </div>
-                        <div class="details-content mt-4 pl-10"><div class="text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><ul class="list-disc list-inside space-y-2"><li>On the opportunity record, confirm the M2 indicator is <span class="font-semibold text-green-600">green</span>.</li><li>If it's <span class="font-semibold text-red-600">red</span>, investigate and resolve the underlying issue.</li><li>Update **FLW3 1 Stop Shop**.</li></ul></div></div>
+                        <div class="details-content mt-4 pl-10"><ul class="list-disc list-inside space-y-2 text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><li>Navigate to the opportunity record.</li><li>Hit **Capture Customer Details**.</li><li>Pick install/shipping address.</li><li>**Input all Vehicle Identification Numbers (VINs), click "Validate VINs," and ensure successful validation.**</li><li>Hit the **Finalize** button.</li></ul></div>
                     </div>
                     <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <input type="checkbox" id="item4" class="checklist-item-checkbox hidden">
+                                <input type="checkbox" id="item4" data-section="immediate" class="checklist-item-checkbox hidden">
                                 <label for="item4" class="flex items-center cursor-pointer">
                                     <span class="w-6 h-6 border-2 border-[#D9D6D1] rounded-md flex-shrink-0 mr-4 flex items-center justify-center"><svg class="checkbox-icon w-4 h-4 text-white bg-[#8DBF8B] rounded-sm transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span>
                                     <span class="item-title font-medium text-lg text-[#4A4742] transition-colors">Complete PVPVC in Gong</span>
@@ -102,12 +109,34 @@
             </section>
             
             <section id="within-24-hours" class="mb-8">
-                <h2 class="text-2xl font-semibold border-b-2 border-[#EFEBE6] pb-3 mb-6 text-[#4A4742]">Within 24 Hours <span class="text-base font-normal text-[#6B6862]">(Post-Sale Confirmed)</span></h2>
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-semibold text-[#4A4742]">Post-Sale Confirmed <span class="text-base font-normal text-[#6B6862]">(Within 24 Hours)</span></h2>
+                    <span id="24hr-progress-text" class="text-sm font-bold text-[#4A4742]">0%</span>
+                </div>
+                <div class="section-progress-container"><div id="24hr-progress-bar" class="section-progress-bar"></div></div>
+                <div class="border-b-2 border-[#EFEBE6] pb-3 mb-6"></div>
+
                 <div class="space-y-4">
+                    <!-- MOVED ITEM 3: Check M2 Status -->
+                    <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
+                        <div class="flex items-center justify-between">
+                             <div class="flex items-center">
+                                <input type="checkbox" id="item3" data-section="24hr" class="checklist-item-checkbox hidden">
+                                <label for="item3" class="flex items-center cursor-pointer">
+                                    <span class="w-6 h-6 border-2 border-[#D9D6D1] rounded-md flex-shrink-0 mr-4 flex items-center justify-center"><svg class="checkbox-icon w-4 h-4 text-white bg-[#8DBF8B] rounded-sm transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span>
+                                    <span class="item-title font-medium text-lg text-[#4A4742] transition-colors">Check M2 Status</span>
+                                </label>
+                            </div>
+                            <button class="details-toggle text-sm font-semibold text-[#4A4742] hover:text-[#6B6862] transition-colors flex items-center">Details <svg class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                        </div>
+                        <div class="details-content mt-4 pl-10"><div class="text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><ul class="list-disc list-inside space-y-2"><li>On the opportunity record, confirm the M2 indicator is <span class="font-semibold text-green-600">green</span>.</li><li>If it's <span class="font-semibold text-red-600">red</span>, investigate and resolve the underlying issue.</li><li>Update **FLW3 1 Stop Shop**.</li></ul></div></div>
+                    </div>
+
+                    <!-- ITEM 5: Complete Cadence Task ("Welcome SMS #1") -->
                     <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <input type="checkbox" id="item5" class="checklist-item-checkbox hidden">
+                                <input type="checkbox" id="item5" data-section="24hr" class="checklist-item-checkbox hidden">
                                 <label for="item5" class="flex items-center cursor-pointer">
                                     <span class="w-6 h-6 border-2 border-[#D9D6D1] rounded-md flex-shrink-0 mr-4 flex items-center justify-center"><svg class="checkbox-icon w-4 h-4 text-white bg-[#8DBF8B] rounded-sm transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span>
                                     <span class="item-title font-medium text-lg text-[#4A4742] transition-colors">Complete Cadence Task ("Welcome SMS #1")</span>
@@ -138,12 +167,12 @@
             </section>
 
             <section id="follow-up-actions" class="mb-8">
-                <h2 class="text-2xl font-semibold border-b-2 border-[#EFEBE6] pb-3 mb-6 text-[#4A4742]">Follow-Up Actions <span class="text-base font-normal text-[#6B6862]">(After COJ Task)</span></h2>
+                <h2 class="text-2xl font-semibold border-b-2 border-[#EFEBE6] pb-3 mb-6 text-[#4A4742]">Follow-Up Actions <span class="text-base font-normal text-[#6B6862]">(Within 24-48 Hours Post-Sale)</span></h2>
                 <div class="space-y-4">
                     <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <input type="checkbox" id="item6" class="checklist-item-checkbox hidden">
+                                <input type="checkbox" id="item6" data-section="follow-up" class="checklist-item-checkbox hidden">
                                 <label for="item6" class="flex items-center cursor-pointer">
                                     <span class="w-6 h-6 border-2 border-[#D9D6D1] rounded-md flex-shrink-0 mr-4 flex items-center justify-center"><svg class="checkbox-icon w-4 h-4 text-white bg-[#8DBF8B] rounded-sm transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span>
                                     <span class="item-title font-medium text-lg text-[#4A4742] transition-colors">Prompt Customer for Email Response</span>
@@ -151,83 +180,121 @@
                             </div>
                             <button class="details-toggle text-sm font-semibold text-[#4A4742] hover:text-[#6B6862] transition-colors flex items-center">Details <svg class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                         </div>
-                        <div class="details-content mt-4 pl-10"><div class="text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><p>After the COJ text message is sent, follow up with the customer.</p><p class="mt-2">Instruct them to find and respond to the email with the subject line:</p><p class="font-semibold my-1">"Quick Action Needed: Confirm Fleet & Shipping Details"</p><p>Ask them to review the details in the email and reply with <span class="font-semibold">"Looks good"</span> or similar to confirm everything is correct.</p></div></div>
+                        <div class="details-content mt-4 pl-10"><div class="text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><p>After the COJ text message is sent and the **VOSS team has sent the fleet confirmation email (which you are CC'd on)**, follow up with the customer.</p><p class="mt-2">Instruct them to find and respond to the email with the subject line:</p><p class="font-semibold my-1">"Quick Action Needed: Confirm Fleet & Shipping Details"</p><p>Ask them to review the details in the email and reply with <span class="font-semibold">"Looks good"</span> or similar to confirm everything is correct.</p></div></div>
                     </div>
                 </div>
             </section>
         </main>
         
-        <footer class="bg-white rounded-xl shadow-sm p-6 mt-12">
-             <h2 class="text-2xl font-semibold mb-4 text-[#4A4742] text-center">Log Deal & Save PDF</h2>
-             <p class="text-center text-sm text-[#6B6862] mb-6">Fill out the details below to log this deal in the Google Sheet and save a PDF copy of the checklist.</p>
-            <div id="pdf-form" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                
-                <div><label for="companyName" class="block text-sm font-medium text-[#4A4742]">Company Name</label><input type="text" id="companyName" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"></div>
-                <div><label for="repName" class="block text-sm font-medium text-[#4A4742]">Rep Name</label><select id="repName" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"><option>Caroline</option><option>Dustin</option><option>Leroy</option><option>Morgan</option><option>Pat</option><option>Mez</option><option>Gio</option><option>Marc</option><option>Eddie</option><option>JB</option></select></div>
-                <div><label for="vtu" class="block text-sm font-medium text-[#4A4742]">VTU</label><input type="text" id="vtu" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"></div>
-                <div><label for="sfdcLink" class="block text-sm font-medium text-[#4A4742]">SFDC Link</label><input type="url" id="sfdcLink" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"></div>
-                <div><label for="mrr" class="block text-sm font-medium text-[#4A4742]">MRR</label><input type="number" id="mrr" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"></div>
-                <div><label for="dateSold" class="block text-sm font-medium text-[#4A4742]">Date Sold</label><input type="date" id="dateSold" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"></div>
-                <div><label for="leadSource" class="block text-sm font-medium text-[#4A4742]">Lead Source</label><select id="leadSource" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"><option>Google Adwords</option><option>Expert Market</option><option>Facebook</option><option>Google Display</option><option>Phone Inbound</option><option>Organic</option></select></div>
-                <div><label for="svtNotes" class="block text-sm font-medium text-[#4A4742]">SVT Notes</label><select id="svtNotes" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"><option>SC'ed</option><option>Waiting on SVT</option><option>wallet ID failed</option><option>Wet Signature</option></select></div>
-                 
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 md:col-span-2">
-                    <div><label for="vinNumbers" class="block text-sm font-medium text-[#4A4742] truncate">Vin Numbers?</label><select id="vinNumbers" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"><option>✅</option><option>❌</option></select></div>
-                    <div><label for="pvpvc" class="block text-sm font-medium text-[#4A4742]">PVPVC updated in Gong?</label><select id="pvpvc" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"><option>✅</option><option>❌</option></select></div>
-                    <div><label for="m2" class="block text-sm font-medium text-[#4A4742]">M2?</label><select id="m2" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"><option>✅</option><option>❌</option></select></div>
-                    <div><label for="csp" class="block text-sm font-medium text-[#4A4742]">CSP Created?</label><select id="csp" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"><option>✅</option><option>❌</option></select></div>
-                    <div><label for="unitsShipped" class="block text-sm font-medium text-[#4A4742]">Units Shipped?</label><select id="unitsShipped" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"><option>✅</option><option>❌</option></select></div>
-                    <div><label for="vmi" class="block text-sm font-medium text-[#4A4742]">VMI/CMI?</label><select id="vmi" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#8DBF8B] focus:border-[#8DBF8B]"><option>VMI</option><option>CMI</option></select></div>
-                 </div>
-            </div>
-            <div class="mt-6 flex flex-col sm:flex-row justify-center items-center gap-4">
-                <button id="log-deal-button" class="w-full sm:w-auto bg-gradient-to-r from-[#8DBF8B] to-[#68A265] text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity shadow-md">Log Deal & Save PDF</button>
-                <button id="reset-button" class="w-full sm:w-auto bg-[#6B6862] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#4A4742] transition-colors">Reset Checklist</button>
-            </div>
+        <footer class="text-center mt-12">
+            <button id="reset-button" class="bg-[#6B6862] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#4A4742] transition-colors">Reset Guide Progress</button>
         </footer>
     </div>
 
     <script>
-        const { jsPDF } = window.jspdf;
+        const updateSectionProgress = () => {
+            const sections = {
+                'immediate': { items: ['item1', 'item2', 'item4'], count: 0, checked: 0 },
+                '24hr': { items: ['item3', 'item5'], count: 0, checked: 0 },
+                'follow-up': { items: ['item6'], count: 0, checked: 0 }
+            };
+            let overallChecked = 0;
+            let overallTotal = 0;
 
-        function copyToClipboard(button) {
-            const textToCopy = button.previousElementSibling.querySelector('p').innerText;
-            const tempTextarea = document.createElement('textarea');
-            tempTextarea.value = textToCopy;
-            document.body.appendChild(tempTextarea);
-            tempTextarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempTextarea);
-            button.innerText = 'Copied!';
-            setTimeout(() => { button.innerText = 'Copy Text'; }, 2000);
-        }
+            // Count items per section
+            document.querySelectorAll('.checklist-item-checkbox').forEach(checkbox => {
+                const sectionKey = checkbox.getAttribute('data-section');
+                if (sections[sectionKey]) {
+                    sections[sectionKey].count++;
+                    overallTotal++;
+                    if (checkbox.checked) {
+                        sections[sectionKey].checked++;
+                        overallChecked++;
+                    }
+                }
+            });
+
+            // Update each section bar
+            for (const key in sections) {
+                const section = sections[key];
+                const percentage = section.count > 0 ? Math.round((section.checked / section.count) * 100) : 0;
+                
+                const progressBar = document.getElementById(`${key}-progress-bar`);
+                const progressText = document.getElementById(`${key}-progress-text`);
+
+                if (progressBar) {
+                    progressBar.style.width = `${percentage}%`;
+                }
+                if (progressText) {
+                    progressText.textContent = `${percentage}%`;
+                }
+            }
+
+            // Update overall bar
+            const overallPercentage = overallTotal > 0 ? Math.round((overallChecked / overallTotal) * 100) : 0;
+            
+            const overallProgressBar = document.getElementById('progress-bar');
+            const overallProgressText = document.getElementById('progress-text');
+
+            if (overallProgressBar) {
+                overallProgressBar.style.width = `${overallPercentage}%`;
+            }
+            if (overallProgressText) {
+                overallProgressText.textContent = `${overallPercentage}%`;
+            }
+
+            // Change overall bar color on completion
+            if (overallPercentage === 100) {
+                overallProgressBar.classList.remove('from-[#8DBF8B]', 'to-[#68A265]');
+                overallProgressBar.classList.add('from-[#FBBF24]', 'to-[#F59E0B]');
+                overallProgressText.textContent = 'All Done! 🎉';
+            } else {
+                overallProgressBar.classList.add('from-[#8DBF8B]', 'to-[#68A265]');
+                overallProgressBar.classList.remove('from-[#FBBF24]', 'to-[#F59E0B]');
+            }
+
+            saveState();
+        };
+
+        const loadState = () => {
+            const savedState = localStorage.getItem('perfectSaleChecklistState');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                document.querySelectorAll('.checklist-item-checkbox').forEach(checkbox => {
+                    if (state[checkbox.id]) {
+                        checkbox.checked = true;
+                    }
+                });
+            }
+            updateSectionProgress(); 
+        };
+
+        const saveState = () => {
+            const state = {};
+            document.querySelectorAll('.checklist-item-checkbox').forEach(checkbox => {
+                state[checkbox.id] = checkbox.checked;
+            });
+            localStorage.setItem('perfectSaleChecklistState', JSON.stringify(state));
+        };
 
         document.addEventListener('DOMContentLoaded', () => {
             const checkboxes = document.querySelectorAll('.checklist-item-checkbox');
             const detailToggles = document.querySelectorAll('.details-toggle');
-            const progressBar = document.getElementById('progress-bar');
-            const progressText = document.getElementById('progress-text');
             const resetButton = document.getElementById('reset-button');
-            const totalItems = checkboxes.length;
 
-            const updateProgress = () => {
-                const checkedItems = document.querySelectorAll('.checklist-item-checkbox:checked').length;
-                const percentage = totalItems > 0 ? Math.round((checkedItems / totalItems) * 100) : 0;
-                
-                progressBar.style.width = `${percentage}%`;
-                progressText.textContent = `${percentage}%`;
+            loadState(); // Load state before setting up event listeners
 
-                if (percentage === 100) {
-                   progressBar.classList.remove('from-[#8DBF8B]', 'to-[#68A265]');
-                   progressBar.classList.add('from-[#FBBF24]', 'to-[#F59E0B]');
-                   progressText.textContent = 'All Done! 🎉';
-                } else {
-                   progressBar.classList.add('from-[#8DBF8B]', 'to-[#68A265]');
-                   progressBar.classList.remove('from-[#FBBF24]', 'to-[#F59E0B]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateSectionProgress);
+                // Assign section data attribute for checklist logic
+                if (checkbox.id === 'item1' || checkbox.id === 'item2' || checkbox.id === 'item4') {
+                    checkbox.setAttribute('data-section', 'immediate');
+                } else if (checkbox.id === 'item3' || checkbox.id === 'item5') {
+                    checkbox.setAttribute('data-section', '24hr');
+                } else if (checkbox.id === 'item6') {
+                    checkbox.setAttribute('data-section', 'follow-up');
                 }
-            };
-
-            checkboxes.forEach(checkbox => checkbox.addEventListener('change', updateProgress));
+            });
 
             detailToggles.forEach(toggle => {
                 toggle.addEventListener('click', () => {
@@ -240,107 +307,9 @@
 
             resetButton.addEventListener('click', () => {
                 checkboxes.forEach(checkbox => { checkbox.checked = false; });
-                document.getElementById('pdf-form').reset();
-                setDateToToday();
-                updateProgress();
+                saveState(); // Save reset state
+                updateSectionProgress();
             });
-            
-            const setDateToToday = () => {
-                const dateField = document.getElementById('dateSold');
-                const today = new Date();
-                const year = today.getFullYear();
-                const month = String(today.getMonth() + 1).padStart(2, '0');
-                const day = String(today.getDate()).padStart(2, '0');
-                dateField.value = `${year}-${month}-${day}`;
-            };
-
-            const logDealButton = document.getElementById('log-deal-button');
-            logDealButton.addEventListener('click', async () => {
-                const companyName = document.getElementById('companyName').value;
-                const repName = document.getElementById('repName').value;
-                const vtu = document.getElementById('vtu').value;
-                const sfdcLink = document.getElementById('sfdcLink').value;
-                const mrr = document.getElementById('mrr').value;
-                const dateSold = document.getElementById('dateSold').value;
-                const leadSource = document.getElementById('leadSource').value;
-                const svtNotes = document.getElementById('svtNotes').value;
-                const vinNumbers = document.getElementById('vinNumbers').value;
-                const pvpvc = document.getElementById('pvpvc').value;
-                const m2 = document.getElementById('m2').value;
-                const csp = document.getElementById('csp').value;
-                const unitsShipped = document.getElementById('unitsShipped').value;
-                const vmi = document.getElementById('vmi').value;
-                
-
-                if (!companyName) {
-                    alert('Please enter a Company Name before logging the deal.');
-                    return;
-                }
-                
-                const baseURL = 'https://docs.google.com/forms/d/e/1FAIpQLSemch6-doXx4b9OPh1ZvssEhe_YnzI7LyP0N9b60-Otmn26QA/viewform?usp=pp_url';
-                const params = new URLSearchParams();
-                // FINAL MAPPING BASED ON USER'S LAST PROVIDED LINK AND ORDER
-                params.append('entry.1498937686', companyName);
-                params.append('entry.312361628', repName);
-                params.append('entry.138197049', vtu);
-                params.append('entry.1228869943', sfdcLink);
-                params.append('entry.922416886', mrr);
-                params.append('entry.1867577154', dateSold);
-                params.append('entry.828850557', leadSource);
-                params.append('entry.1504397745', svtNotes);
-                params.append('entry.863847063', vinNumbers); 
-                params.append('entry.269011683', pvpvc);      
-                params.append('entry.1906305465', m2);         
-                params.append('entry.924526391', csp);        
-                params.append('entry.564185478', unitsShipped); 
-                params.append('entry.2031712552', vmi);       // THIS IS THE FIELD WE ARE FIXING
-
-                const prefilledUrl = `${baseURL}&${params.toString()}`;
-                window.open(prefilledUrl, '_blank');
-                
-                // Save PDF
-                logDealButton.innerText = 'Saving PDF...';
-                logDealButton.disabled = true;
-
-                const checklistElement = document.getElementById('checklist-container');
-                const canvas = await html2canvas(checklistElement, { scale: 2 });
-                const imgData = canvas.toDataURL('image/png');
-                
-                const doc = new jsPDF({
-                    orientation: 'p',
-                    unit: 'mm',
-                    format: 'a4'
-                });
-
-                const page_margin = 15;
-                const content_width = doc.internal.pageSize.getWidth() - (page_margin * 2);
-                const img_width = canvas.width;
-                const img_height = canvas.height;
-                const aspect_ratio = img_height / img_width;
-                const content_height = content_width * aspect_ratio;
-
-                doc.setFontSize(22);
-                doc.setTextColor('#33312E');
-                doc.text("Checklist for:", page_margin, page_margin + 5);
-                doc.setFontSize(28);
-                doc.setTextColor('#4A4742');
-                doc.text(companyName, page_margin, page_margin + 15);
-                
-                if (sfdcLink) {
-                    doc.setFontSize(12);
-                    doc.setTextColor('#007BFF');
-                    doc.textWithLink('View Opportunity in Salesforce', page_margin, page_margin + 22, { url: sfdcLink });
-                }
-
-                doc.addImage(imgData, 'PNG', page_margin, page_margin + 30, content_width, content_height);
-                doc.save(`${companyName || 'Sales-Checklist'}.pdf`);
-
-                logDealButton.innerText = 'Log Deal & Save PDF';
-                logDealButton.disabled = false;
-            });
-
-            setDateToToday();
-            updateProgress();
         });
     </script>
 </body>
