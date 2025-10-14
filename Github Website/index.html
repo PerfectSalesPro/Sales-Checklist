@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verizon Connect - Sales Onboarding & Compliance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        /* --- Generic & Tab Styles --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* A neutral background */
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-button.active {
+            color: #d90000; /* Verizon Red */
+            border-bottom-color: #d90000;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* --- Styles from Compliance Guide --- */
+        #compliance-checklist .details-content {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        #compliance-checklist .details-content.open { max-height: 800px; opacity: 1; }
+        #compliance-checklist .checklist-item-checkbox:checked + label .checkbox-icon { transform: scale(1); }
+        #compliance-checklist .checklist-item-checkbox:checked ~ .item-title { text-decoration: line-through; color: #9ca3af; }
+        #compliance-checklist .section-progress-container {
+            width: 100%; background-color: #EFEBE6; border-radius: 9999px;
+            height: 6px; margin-top: 8px; overflow: hidden;
+        }
+        #compliance-checklist .section-progress-bar {
+            background-color: #8DBF8B; height: 100%; transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <!-- Header & Tab Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-red-600">verizon</span><span class="text-xl font-bold text-gray-700">connect</span>
+                    <span class="ml-4 text-gray-500 font-medium hidden md:block">Sales Enablement Hub</span>
+                </div>
+            </div>
+            <div class="border-b border-gray-200">
+                <nav class="flex space-x-6 -mb-px px-4 sm:px-6 lg:px-8" aria-label="Tabs">
+                    <button class="tab-button active whitespace-nowrap py-4 px-1 font-medium text-sm" data-target="tab-compliance">Reference List</button>
+                    <button class="tab-button whitespace-nowrap py-4 px-1 font-medium text-sm" data-target="tab-emails">VOSS Post Sale Emails</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <!-- Tab 1: Reference List -->
+        <div id="tab-compliance" class="tab-content active">
+            <div id="compliance-checklist" class="max-w-4xl mx-auto">
+                 <header class="text-center mb-8 pt-6">
+                    <h1 class="text-3xl sm:text-4xl font-bold text-[#4A4742]">The Perfect Sale: Deal Automation Guide</h1>
+                    <p class="text-lg text-[#6B6862] mt-2">A required guide to ensure full compliance and successful deal handoff automation.</p>
+                </header>
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                    <div class="flex justify-between items-center mb-2"><span class="text-sm font-medium text-[#4A4742]">Overall Compliance Progress</span><span id="progress-text" class="text-sm font-bold text-[#4A4742]">0%</span></div>
+                    <div class="w-full bg-[#EFEBE6] rounded-full h-3"><div id="progress-bar" class="bg-gradient-to-r from-[#8DBF8B] to-[#68A265] h-3 rounded-full transition-all duration-500" style="width: 0%"></div></div>
+                    <p class="text-center text-sm mt-4 font-semibold text-[#4A4742]">Note: Click the "Details" buttons to expand the contents for each step.</p>
+                </div>
+                <main id="checklist-container">
+                    <section id="immediate-actions" class="mb-8">
+                        <div class="flex justify-between items-center"><h2 class="text-2xl font-semibold text-[#4A4742]">Immediate Actions <span class="text-base font-normal text-[#6B6862]">(Post-Signature)</span></h2><span id="immediate-progress-text" class="text-sm font-bold text-[#4A4742]">0%</span></div>
+                        <div class="section-progress-container"><div id="immediate-progress-bar" class="section-progress-bar"></div></div>
+                        <div class="border-b-2 border-[#EFEBE6] pb-3 mb-6"></div>
+                        <div class="space-y-4">
+                            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center"><input type="checkbox" id="item1" data-section="immediate" class="checklist-item-checkbox hidden"><label for="item1" class="flex items-center cursor-pointer"><span class="w-6 h-6 border-2 border-[#D9D6D1] rounded-md flex-shrink-0 mr-4 flex items-center justify-center"><svg class="checkbox-icon w-4 h-4 text-white bg-[#8DBF8B] rounded-sm transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span><span class="item-title font-medium text-lg text-[#4A4742] transition-colors">Request POC & Verify Details</span></label></div>
+                                    <button class="details-toggle text-sm font-semibold text-[#4A4742] hover:text-[#6B6862] transition-colors flex items-center">Details <svg class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                                </div>
+                                <div class="details-content mt-4 pl-10"><div class="text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><ul class="list-disc list-inside space-y-3"><li>Verify the <strong>shipping address</strong> and the <strong>install address</strong>, confirming if they are different.</li><li>Ask your champion:<blockquote class="border-l-4 border-[#D9D6D1] pl-4 italic my-2">"Will you be the main point of contact for scheduling the installation, or is there an office manager or someone else I should coordinate with?"</blockquote><ul class="list-[circle] list-inside ml-5 mt-2 space-y-1"><li>If there is another POC, be sure to get their full name, email, direct phone number, and their role/title.</li></ul></li><li>Add any new contact to the account immediately.</li><li class="font-bold">For all contacts associated with the opportunity, assign their relevant persona (e.g., Business Owner, Fleet Manager, Office Manager/Dispatch).</li></ul></div></div>
+                            </div>
+                            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center"><input type="checkbox" id="item2" data-section="immediate" class="checklist-item-checkbox hidden"><label for="item2" class="flex items-center cursor-pointer"><span class="w-6 h-6 border-2 border-[#D9D6D1] rounded-md flex-shrink-0 mr-4 flex items-center justify-center"><svg class="checkbox-icon w-4 h-4 text-white bg-[#8DBF8B] rounded-sm transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span><span class="item-title font-medium text-lg text-[#4A4742] transition-colors">Finalize Opportunity with Vins</span></label></div>
+                                    <button class="details-toggle text-sm font-semibold text-[#4A4742] hover:text-[#6B6862] transition-colors flex items-center">Details <svg class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                                </div>
+                                <div class="details-content mt-4 pl-10"><ul class="list-disc list-inside space-y-2 text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><li>Navigate to the opportunity record.</li><li>Hit <strong>Capture Customer Details</strong>.</li><li>Pick install/shipping address.</li><li><strong>Input all Vehicle Identification Numbers (VINs), click "Validate VINs," and ensure successful validation.</strong></li><li>Hit the <strong>Finalize</strong> button.</li></ul></div>
+                            </div>
+                            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center"><input type="checkbox" id="item4" data-section="immediate" class="checklist-item-checkbox hidden"><label for="item4" class="flex items-center cursor-pointer"><span class="w-6 h-6 border-2 border-[#D9D6D1] rounded-md flex-shrink-0 mr-4 flex items-center justify-center"><svg class="checkbox-icon w-4 h-4 text-white bg-[#8DBF8B] rounded-sm transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span><span class="item-title font-medium text-lg text-[#4A4742] transition-colors">Complete PVPVC in Gong</span></label></div>
+                                    <button class="details-toggle text-sm font-semibold text-[#4A4742] hover:text-[#6B6862] transition-colors flex items-center">Details <svg class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                                </div>
+                                <div class="details-content mt-4 pl-10"><ul class="list-disc list-inside space-y-2 text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><li>Open the relevant call recording in Gong.</li><li>Thoroughly fill out the Pain, Vision, Power, Value, and Consensus (PVPVC) framework.</li><li class="font-semibold">Note: This is required for all sales, including Sit Sat Solds (SSS).</li></ul></div>
+                            </div>
+                        </div>
+                    </section>
+                    <section id="within-24-hours" class="mb-8">
+                        <div class="flex justify-between items-center"><h2 class="text-2xl font-semibold text-[#4A4742]">Post-Sale Confirmed <span class="text-base font-normal text-[#6B6862]">(Within 24 Hours)</span></h2><span id="hr24-progress-text" class="text-sm font-bold text-[#4A4742]">0%</span></div>
+                        <div class="section-progress-container"><div id="hr24-progress-bar" class="section-progress-bar"></div></div>
+                        <div class="border-b-2 border-[#EFEBE6] pb-3 mb-6"></div>
+                        <div class="space-y-4">
+                             <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
+                                <div class="flex items-center justify-between">
+                                     <div class="flex items-center"><input type="checkbox" id="item3" data-section="hr24" class="checklist-item-checkbox hidden"><label for="item3" class="flex items-center cursor-pointer"><span class="w-6 h-6 border-2 border-[#D9D6D1] rounded-md flex-shrink-0 mr-4 flex items-center justify-center"><svg class="checkbox-icon w-4 h-4 text-white bg-[#8DBF8B] rounded-sm transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span><span class="item-title font-medium text-lg text-[#4A4742] transition-colors">Check M2 Status</span></label></div>
+                                    <button class="details-toggle text-sm font-semibold text-[#4A4742] hover:text-[#6B6862] transition-colors flex items-center">Details <svg class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                                </div>
+                                <div class="details-content mt-4 pl-10"><div class="text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><ul class="list-disc list-inside space-y-2"><li>On the opportunity record, confirm the M2 indicator is <span class="font-semibold text-green-600">green</span>.</li><li>If it's <span class="font-semibold text-red-600">red</span>, investigate and resolve the underlying issue.</li><li>Update <strong>FLW3 1 Stop Shop</strong>.</li></ul></div></div>
+                            </div>
+                            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center"><input type="checkbox" id="item5" data-section="hr24" class="checklist-item-checkbox hidden"><label for="item5" class="flex items-center cursor-pointer"><span class="w-6 h-6 border-2 border-[#D9D6D1] rounded-md flex-shrink-0 mr-4 flex items-center justify-center"><svg class="checkbox-icon w-4 h-4 text-white bg-[#8DBF8B] rounded-sm transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span><span class="item-title font-medium text-lg text-[#4A4742] transition-colors">Complete Cadence Task ("Welcome SMS #1")</span></label></div>
+                                    <button class="details-toggle text-sm font-semibold text-[#4A4742] hover:text-[#6B6862] transition-colors flex items-center">Details <svg class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                                </div>
+                                <div class="details-content mt-4 pl-10"><ul class="list-disc list-inside space-y-3 text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><li class="font-semibold text-[#C46A6A]">Critical: First, verify the customer is enrolled in the correct cadence.</li><ul class="list-[circle] list-inside ml-5 mt-2 space-y-1"><li>Check the account in Salesloft to ensure the <span class="font-bold">"2025_WOS_COJ_Welcome_VCMI"</span> cadence is active.</li><li>If it's missing, <span class="font-bold">highlight the entire account line in red</span> on the "FLW3 1 Stop Shop" sheet to flag it for a manager.</li></ul><li>In Salesloft, locate the task labeled <span class="font-semibold">"Welcome SMS #1"</span>.</li><li>Copy the text from the task description below:<div class="mt-2 p-3 bg-[#F8F7F6] rounded-md border border-[#EFEBE6] text-sm text-[#4A4742]"><p>Welcome to the Verizon Connect team! To kick things off, here's a quick welcome from our GM on how we'll get you to results, fast. https://verizonconnect.com/video/welcome</p></div><button onclick="copyToClipboard(this)" class="mt-2 text-xs font-semibold bg-[#EFEBE6] text-[#4A4742] px-2 py-1 rounded-md hover:bg-[#D9D6D1]">Copy Text</button></li><li class="font-semibold">Click <span class="bg-gray-200 px-1 rounded-sm">"Log & Complete"</span> in Salesloft to send the text and ensure the cadence proceeds automatically.</li><li class="font-semibold text-[#C46A6A]">This must be done within 24 hours.</li></ul></div>
+                            </div>
+                        </div>
+                    </section>
+                    <section id="follow-up-actions" class="mb-8">
+                        <h2 class="text-2xl font-semibold border-b-2 border-[#EFEBE6] pb-3 mb-6 text-[#4A4742]">Follow-Up Actions <span class="text-base font-normal text-[#6B6862]">(Within 24-48 Hours Post-Sale)</span></h2>
+                        <div class="space-y-4">
+                            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md p-5">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center"><input type="checkbox" id="item6" data-section="follow-up" class="checklist-item-checkbox hidden"><label for="item6" class="flex items-center cursor-pointer"><span class="w-6 h-6 border-2 border-[#D9D6D1] rounded-md flex-shrink-0 mr-4 flex items-center justify-center"><svg class="checkbox-icon w-4 h-4 text-white bg-[#8DBF8B] rounded-sm transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span><span class="item-title font-medium text-lg text-[#4A4742] transition-colors">Prompt Customer for Email Response</span></label></div>
+                                    <button class="details-toggle text-sm font-semibold text-[#4A4742] hover:text-[#6B6862] transition-colors flex items-center">Details <svg class="w-4 h-4 ml-1 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                                </div>
+                                <div class="details-content mt-4 pl-10"><div class="text-[#6B6862] border-l-2 border-[#EFEBE6] pl-4 py-2"><p>After the COJ text message is sent and the <strong>VOSS team has sent the fleet confirmation email (which you are CC'd on)</strong>, follow up with the customer.</p><p class="mt-2">Instruct them to find and respond to the email with the subject line:</p><p class="font-semibold my-1">"Quick Action Needed: Confirm Fleet & Shipping Details"</p><p>Ask them to review the details in the email and reply with <span class="font-semibold">"Looks good"</span> or similar to confirm everything is correct.</p></div></div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+                <footer class="text-center mt-12 mb-8">
+                    <button id="reset-button" class="bg-[#6B6862] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#4A4742] transition-colors">Reset Guide Progress</button>
+                </footer>
+            </div>
+        </div>
+
+        <!-- Tab 2: VOSS Post Sale Emails -->
+        <div id="tab-emails" class="tab-content">
+            <div id="email-templates-content" class="max-w-5xl mx-auto">
+                <header class="text-center mb-8 pt-6">
+                    <h1 class="text-3xl sm:text-4xl font-bold text-[#4A4742]">VOSS Post Sale Emails</h1>
+                    <p class="text-lg text-[#6B6862] mt-2">Examples of emails and documents sent to the customer during onboarding.</p>
+                </header>
+
+                <div class="space-y-8">
+                    <!-- Welcome Email -->
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                        <div class="p-5 bg-gray-50 border-b border-gray-200">
+                            <h2 class="text-xl font-semibold text-[#4A4742]">Welcome to Verizon Connect, Let's Get You to Results, Fast.</h2>
+                        </div>
+                        <div class="p-6 text-gray-800 space-y-4">
+                           <p>Hi [Customer Name],</p>
+                           <p>Welcome to Verizon Connect! I'm [VOSS Name], your dedicated Onboarding Success Specialist. As an owner involved in daily operations, you're looking for solutions to see the impact of our technology ASAP. The ask is simple: To make informative decisions so you can get to the results you signed up for.</p>
+                           <p>I understand you're juggling big picture business goals alongside coordinating drivers, managing customer needs, and handling unexpected issues every day.</p>
+                           <p>With that in mind, our entire onboarding process is intentionally designed to be fast, easy, and minimally disruptive as we get to the real-world outcomes you care about:</p>
+                           <div class="border-l-4 border-red-500 pl-4 py-2 my-4">
+                                <ul class="list-disc list-inside space-y-2 text-green-700">
+                                    <li>Less time putting out fires, fewer interruptions and smoother operations.</li>
+                                    <li>Increased control and visibility in every aspect of your fleet.</li>
+                                    <li>Immediate and measurable return on your investment.</li>
+                                </ul>
+                           </div>
+                           <p>To show exactly how we'll support you through onboarding, here's a short 2-minute welcome video from my manager, [Manager Name]. She explains our hands-on approach to getting you started.</p>
+                           <p class="text-center my-4"><a href="https://www.verizonconnect.com/video/onboarding-overview" target="_blank" rel="noopener noreferrer" class="bg-black text-white px-6 py-2 rounded-md font-semibold hover:bg-gray-800 transition">Watch Video</a></p>
+                           <p><a href="VZC_OBCustomerRoadmap.pdf" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline">Click here to view a one-page onboarding roadmap</a> so you know exactly what to expect from here. The goal of this roadmap will be personally covered directly with you. If any questions come up, simply reply. I'm here to help.</p>
+                           <p>Warm regards,</p>
+                           <p>[VOSS Name]<br>Onboarding Success Specialist | Verizon Connect</p>
+                           <p class="text-sm text-gray-500">PS: One quick favor to ensure a smooth process: If you have a backup contact on your team, can you shoot me their name and email? It just helps us keep things moving if you're unavailable.</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Action Email -->
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                        <div class="p-5 bg-gray-50 border-b border-gray-200">
+                            <h2 class="text-xl font-semibold text-[#4A4742]">Quick Action Needed: Confirm Fleet & Shipping Details</h2>
+                        </div>
+                        <div class="p-6 text-gray-800 space-y-4">
+                            <p>Hi [Customer Name],</p>
+                            <p>Hope you're having a good day! Quick favor - could you please double-check the shipping details by the end of day tomorrow, [Date]?</p>
+                            <p class="font-bold">Why this matters:</p>
+                            <p>Your quick double-check here helps me make sure every vehicle receives the correct hardware, preventing shipment mistakes and avoiding installation delays.</p>
+                            <p class="font-bold">Please verify:</p>
+                            <ol class="list-decimal list-inside ml-4">
+                                <li><strong>Shipping Contacts:</strong> [Contact Name], [Contact Phone], [Contact Email]</li>
+                                <li><strong>Shipping Locations:</strong> [Shipping Address]</li>
+                            </ol>
+                            <p class="font-bold">How to respond: - Reply "Looks good" if everything's accurate.</p>
+                            <p>- If you see errors, list corrections directly in your reply or update and return the spreadsheet.</p>
+                            <p>Thanks for your quick attention to this, [Customer Name]. <span class="font-bold">Please note:</span> To keep your installation on schedule, we'll ship based on these details if we don't hear back from you by [Date]. Your quick confirmation ensures a smooth start.</p>
+                            <p>Warm regards,</p>
+                            <p>[VOSS Name]<br>Onboarding Success Specialist | Verizon Connect</p>
+                        </div>
+                    </div>
+
+                    <!-- Hardware Shipped Email Card -->
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                        <div class="p-5 bg-gray-50 border-b border-gray-200">
+                            <h2 class="text-xl font-semibold text-[#4A4742]">Customer Facing Email From Voss after Shipment and Tracking Number Generated</h2>
+                        </div>
+                         <div class="p-6 text-gray-800 space-y-4">
+                            <p>Hi [Customer Name],</p>
+                            <p>Great news! Your Verizon Connect hardware has officially shipped and is heading your way. Here are the details:</p>
+                            <div class="my-4 bg-gray-100 p-4 rounded-md">
+                                <p><strong>Tracking Number:</strong> [Tracking Number]</p>
+                                <p><strong>Shipping to:</strong> [Shipping Address]</p>
+                                <p><strong>Expected Arrival:</strong> [Date and Time Window]</p>
+                            </div>
+                            <p class="font-bold">When your package arrives:</p>
+                            <p>Your only job is to receive the boxes and keep them in a safe spot for our professional installer. There's no need for you to sort through anything.</p>
+                            <p>If you happen to open the box, just be sure to leave the enclosed guide sheet inside. It's a handy reference that helps your installer match the right equipment to each vehicle, so the installation process is quick and efficient.</p>
+                            <p class="font-bold">What happens next:</p>
+                            <p>I'll be closely tracking your shipment. As soon as it arrives, I'll call you to confirm delivery and schedule your installation appointment at a time that is convenient for your business, including evenings or weekends, if that works best for you.</p>
+                            <p>Warm regards,</p>
+                            <p>[VOSS Name]<br>Onboarding Success Specialist | Verizon Connect</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Installation Booked Email Card -->
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                         <div class="p-5 bg-gray-50 border-b border-gray-200">
+                             <h2 class="text-xl font-semibold text-[#4A4742]">Customer Facing Email From Voss When Install has been scheduled</h2>
+                        </div>
+                        <div class="p-6 text-gray-800 space-y-4">
+                            <p>Hi [Customer Name],</p>
+                            <p>Great news! Your Verizon Connect installation appointment is officially on the calendar. We're in the final stretch now.</p>
+                            <div class="my-4 bg-gray-100 p-4 rounded-md">
+                                <p class="font-bold">Your Appointment Details:</p>
+                                <ul class="list-disc list-inside ml-4 mt-2">
+                                    <li><strong>Date:</strong> [Date]</li>
+                                    <li><strong>Time:</strong> [Time Window]</li>
+                                    <li><strong>Location and Vehicles:</strong> See the attached <strong>Installation Readiness Checklist</strong> and <strong>Vehicle and Hardware List</strong>.</li>
+                                </ul>
+                            </div>
+                            <p class="font-bold">Preparing for Installation Day:</p>
+                            <p>Please take a few minutes to review this checklist before installation day so you're fully prepared. It covers the basics the Verizon Install Partner will need from you for a successful installation day. While it might look detailed at first glance, most items are quick confirmations that only take a moment.</p>
+                            <p>I know your day is busy, so please don't feel like you have to figure this out alone. If you'd prefer, we can get on a quick 5-minute call to run through it together. Just let me know what's easiest for you.</p>
+                            <p>As always, I'm here if you have any questions. Looking forward to a smooth installation day.</p>
+                            <p>Warm regards,</p>
+                            <p>[VOSS Name]<br>Onboarding Success Specialist | Verizon Connect</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Installation Checklist Card -->
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                         <div class="p-5 bg-gray-50 border-b border-gray-200">
+                             <h2 class="text-xl font-semibold text-[#4A4742]">Document Attached to Customer Facing Email From Voss When Install has been scheduled</h2>
+                        </div>
+                        <div class="p-5 text-center">
+                            <a href="Copy of OMS-2025023_VZC Customer Checklist Customizable 15 VINs A 081225.pdf" download
+                               class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                                Download Installation Readiness Checklist
+                            </a>
+                             <p class="text-xs text-gray-500 mt-2">NOTE: You must upload the PDF to the same directory as this HTML file for the download to work.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Merged Scripts -->
+    <script>
+        // Function for Compliance Guide's "Copy" button
+        function copyToClipboard(button) {
+            const textToCopy = button.previousElementSibling.querySelector('p').innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                button.innerText = 'Copied!';
+                setTimeout(() => { button.innerText = 'Copy Text'; }, 2000);
+            }, () => {
+                // Fallback for environments where clipboard API might fail (like snippets)
+                alert('Failed to copy. Please copy manually.');
+            });
+        }
+
+        // Main DOMContentLoaded listener for all scripts
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            // --- MASTER TABBING LOGIC ---
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    tabContents.forEach(content => {
+                        content.classList.toggle('active', content.id === targetId);
+                    });
+                });
+            });
+
+            // --- COMPLIANCE CHECKLIST SCRIPT ---
+            const complianceChecklist = document.getElementById('compliance-checklist');
+            if (complianceChecklist) {
+                const updateSectionProgress = () => {
+                    const sections = { 'immediate': { count: 0, checked: 0 }, 'hr24': { count: 0, checked: 0 }, 'follow-up': { count: 0, checked: 0 } };
+                    let overallChecked = 0, overallTotal = 0;
+
+                    complianceChecklist.querySelectorAll('.checklist-item-checkbox').forEach(checkbox => {
+                        const sectionKey = checkbox.getAttribute('data-section');
+                        if (sections[sectionKey]) {
+                            sections[sectionKey].count++;
+                            overallTotal++;
+                            if (checkbox.checked) {
+                                sections[sectionKey].checked++;
+                                overallChecked++;
+                            }
+                        }
+                    });
+
+                    for (const key in sections) {
+                        const { count, checked } = sections[key];
+                        const percentage = count > 0 ? Math.round((checked / count) * 100) : 0;
+                        const progressBar = complianceChecklist.querySelector(`#${key}-progress-bar`);
+                        const progressText = complianceChecklist.querySelector(`#${key}-progress-text`);
+                        if (progressBar) progressBar.style.width = `${percentage}%`;
+                        if (progressText) progressText.textContent = `${percentage}%`;
+                    }
+
+                    const overallPercentage = overallTotal > 0 ? Math.round((overallChecked / overallTotal) * 100) : 0;
+                    const overallProgressBar = complianceChecklist.querySelector('#progress-bar');
+                    const overallProgressText = complianceChecklist.querySelector('#progress-text');
+
+                    if (overallProgressBar) overallProgressBar.style.width = `${overallPercentage}%`;
+                    if (overallProgressText) overallProgressText.textContent = `${overallPercentage}%`;
+                    
+                    if (overallPercentage === 100) {
+                        overallProgressBar.classList.remove('from-[#8DBF8B]', 'to-[#68A265]');
+                        overallProgressBar.classList.add('from-amber-400', 'to-amber-500');
+                        overallProgressText.textContent = 'All Done! 🎉';
+                    } else {
+                        overallProgressBar.classList.add('from-[#8DBF8B]', 'to-[#68A265]');
+                        overallProgressBar.classList.remove('from-amber-400', 'to-amber-500');
+                    }
+                    saveState();
+                };
+
+                const saveState = () => {
+                    const state = {};
+                    complianceChecklist.querySelectorAll('.checklist-item-checkbox').forEach(c => { state[c.id] = c.checked; });
+                    localStorage.setItem('perfectSaleChecklistState', JSON.stringify(state));
+                };
+
+                const loadState = () => {
+                    const savedState = localStorage.getItem('perfectSaleChecklistState');
+                    if (savedState) {
+                        const state = JSON.parse(savedState);
+                        complianceChecklist.querySelectorAll('.checklist-item-checkbox').forEach(c => {
+                            if (state[c.id]) c.checked = true;
+                        });
+                    }
+                    updateSectionProgress();
+                };
+
+                const checkboxes = complianceChecklist.querySelectorAll('.checklist-item-checkbox');
+                const detailToggles = complianceChecklist.querySelectorAll('.details-toggle');
+                const resetButton = complianceChecklist.querySelector('#reset-button');
+                
+                loadState();
+                checkboxes.forEach(c => c.addEventListener('change', updateSectionProgress));
+                if (detailToggles) {
+                    detailToggles.forEach(toggle => {
+                        toggle.addEventListener('click', () => {
+                            const content = toggle.parentElement.nextElementSibling;
+                            const icon = toggle.querySelector('svg');
+                            content.classList.toggle('open');
+                            icon.classList.toggle('rotate-180');
+                        });
+                    });
+                }
+                resetButton.addEventListener('click', () => {
+                    checkboxes.forEach(c => { c.checked = false; });
+                    saveState();
+                    updateSectionProgress();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
